@@ -1,6 +1,6 @@
 package com.example.javanesescriptrecognizer.data.models;
 
-public class AksaraEnum {
+public class TypeEnums {
     public enum GroupType {
         aksara, sandhangan, pasangan,
     }
