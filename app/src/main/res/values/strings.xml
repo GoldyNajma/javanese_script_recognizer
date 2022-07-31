@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Javanese Script Recognizer</string>
+    <string name="load_image">Load Image</string>
+    <string name="model_vgg">VGG-16</string>
+    <string name="model_resnext">ResNeXt-50</string>
+    <string name="recognize_vgg">Recognize\n(VGG-16)</string>
+    <string name="recognize_resnext">Recognize\n(ResNeXt-50)</string>
+    <string name="image">image</string>
+    <string name="title">Title</string>
+    <string name="details_title">Details</string>
+    <string name="show_detail">Show Detail</string>
+    <string-array name="model_list">
+        <item>ResNeXt-50</item>
+        <item>VGG-16</item>
+    </string-array>
 </resources>

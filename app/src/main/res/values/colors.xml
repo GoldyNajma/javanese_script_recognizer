@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--<resources>-->
+<!--    <color name="purple_200">#FFBB86FC</color>-->
+<!--    <color name="purple_500">#FF6200EE</color>-->
+<!--    <color name="purple_700">#FF3700B3</color>-->
+<!--    <color name="teal_200">#FF03DAC5</color>-->
+<!--    <color name="teal_700">#FF018786</color>-->
+<!--    <color name="black">#FF000000</color>-->
+<!--    <color name="white">#FFFFFFFF</color>-->
+<!--</resources>-->
 <resources>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
@@ -7,4 +16,51 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+<!--    <color name="colorPrimary">#6200EE</color>-->
+<!--    <color name="colorPrimaryDark">#3700B3</color>-->
+<!--    <color name="colorAccent">#03DAC5</color>-->
+    <color name="colorPrimary">@color/goldyPrimary</color>
+    <color name="colorPrimaryDark">@color/goldyPrimaryDark</color>
+    <color name="colorAccent">@color/goldyAccent</color>
+
+    <!--My Color-->
+    <color name="myPrimary">#128C7E</color>
+    <color name="myPrimaryDark">#075e54</color>
+    <color name="myText">#41a290</color>
+    <color name="myTextLight">#FFFFFF</color>
+    <color name="myLightBackground">#a7e6d7</color>
+    <color name="myTransparent">#8c128C7E</color>
+    <color name="myLayoutColor">#EEEEEE</color>
+
+    <!--pallete one-->
+    <color name="pantoneDark331c">#017787</color>
+    <color name="pantoneOne">#01B0C8</color><!--3DAEBD-->
+    <color name="pantoneTwo">#30CBE1</color>
+    <color name="pantoneTree">#5BD4E5</color>
+    <color name="pantoneTransparent">#6605c3de</color>
+    <color name="pantoneDarkTransparent">#8c017787</color>
+    <color name="pantone331c">#05c3de</color>
+
+    <!--My Color-->
+    <color name="a">#128C7E</color>
+    <color name="b">#075e54</color>
+    <color name="c">#41a290</color>
+
+    <!--Goldy's Color-->
+    <color name="goldyPrimary">#c55911</color>
+<!--    FFA100-->
+
+<!--    <color name="goldyPrimaryDark">#e0a800</color>-->
+    <color name="goldyTransparent">#e0a800</color>
+    <color name="goldySecondary">#444444</color>
+    <color name="goldyText">@color/goldySecondary</color>
+    <color name="goldyTextLight">#FFFFFF</color>
+    <color name="goldyLightBackground">#FADA5E</color>
+<!--    <color name="goldyTransparent">#CC6611</color>-->
+    <color name="goldyPrimaryDark">#843c0c</color>
+<!--    CC6611-->
+
+    <color name="goldyLayoutColor">#DFDFDF</color>
+    <color name="goldyAccent">#2a76b4</color>
 </resources>

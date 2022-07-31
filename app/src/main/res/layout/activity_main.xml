@@ -6,13 +6,119 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/main_iv_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:contentDescription="@string/image"
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
+        android:id="@+id/main_tv_reading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:minHeight="60dp"
+        android:text=""
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textIsSelectable="true"
+        android:textSize="@dimen/main_tv_reading_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/main_sv_result"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_iv_image"
+        tools:text="@tools:sample/lorem" />
+
+    <ScrollView
+        android:id="@+id/main_sv_result"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:layout_constraintTop_toBottomOf="@+id/main_tv_reading"
+        app:layout_constraintBottom_toTopOf="@+id/main_bt_load"
+        tools:layout_editor_absoluteX="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/main_tv_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:lineSpacingMultiplier="1.5"
+                android:text=""
+                android:textAllCaps="false"
+                android:textAlignment="center"
+                android:paddingVertical="10dp"
+                android:textSize="@dimen/main_tv_unicodes_text_size"
+                android:textStyle="bold"
+                android:textIsSelectable="true"
+                tools:text="@tools:sample/lorem/random" />
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/main_bt_load"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/load_image"
+        android:textSize="@dimen/main_bt_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/main_bt_resnext"
+        app:layout_constraintTop_toBottomOf="@+id/main_sv_result" />
+
+    <Button
+        android:id="@+id/main_bt_vgg"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/recognize_vgg"
+        android:textSize="@dimen/main_bt_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/main_bt_detail"
+        app:layout_constraintEnd_toStartOf="@id/main_bt_resnext"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_bt_load" />
+
+    <Button
+        android:id="@+id/main_bt_resnext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/recognize_resnext"
+        android:textSize="@dimen/main_bt_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/main_bt_detail"
+        app:layout_constraintStart_toEndOf="@id/main_bt_vgg"
+        app:layout_constraintTop_toBottomOf="@+id/main_bt_load"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/main_bt_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/show_detail"
+        android:textSize="@dimen/main_bt_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_bt_resnext" />
+
+
+    <ProgressBar
+        android:id="@+id/main_pb_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:indeterminateTint="?attr/colorSecondary"
+        android:visibility="gone"
+        android:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="?android:attr/progressBarStyleLarge" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
