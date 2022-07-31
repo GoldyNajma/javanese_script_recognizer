@@ -4,12 +4,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.javanesescriptrecognizer.data.models.AksaraClasses.*;
-import com.example.javanesescriptrecognizer.data.models.TypeEnums.*;
+import com.example.javanesescriptrecognizer.data.models.AksaraClass.*;
+import com.example.javanesescriptrecognizer.data.models.AksaraEnum.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class PostprocessingUtil {
@@ -46,20 +44,6 @@ public class PostprocessingUtil {
 
     @NonNull
     public static String arrange(@NonNull List<List<JavaneseScript>> classes) {
-//        List<List<JavaneseScript>> classes = new ArrayList<>();
-//
-//        for (JavaneseScript[] result : segmentationResults) {
-//            classes.add(Arrays.asList(result));
-//        }
-//        List<List<JavaneseScript>> classes = Arrays.asList(
-//            Arrays.asList(new WyanjanaAksara(WyanjanaType.ba), new Sandhangan(SandhanganType.suku)),
-//            Collections.singletonList(new WyanjanaAksara(WyanjanaType.dha)),
-//            Collections.singletonList(new Sandhangan(SandhanganType.taling)),
-//            Arrays.asList(new WyanjanaAksara(WyanjanaType.la), new WyanjanaPasangan(WyanjanaType.da)),
-//            Collections.singletonList(new Sandhangan(SandhanganType.tarung)),
-//            Collections.singletonList(new WyanjanaAksara(WyanjanaType.la)),
-//            Arrays.asList(new WyanjanaAksara(WyanjanaType.na), new Sandhangan(SandhanganType.pangkon))
-//        );
         StringBuilder finalReading = new StringBuilder();
         List<JavaneseScript> talingListTemp = new ArrayList<>();
 
@@ -143,7 +127,6 @@ public class PostprocessingUtil {
                 finalReading.append(aksara.getReading());
             }
             Log.d(TAG, finalReading.toString());
-//            print(finalReading);
 
             for (JavaneseScript pasangan : pasanganList) {
                 if (finalReading.length() > 0) {
@@ -154,7 +137,6 @@ public class PostprocessingUtil {
             }
 
             Log.d(TAG, finalReading.toString());
-//            print(finalReading);
 
             for (JavaneseScript sandhangan : sandhanganList) {
                 if (sandhangan.getTypeEnum() == SandhanganType.taling) {
@@ -209,7 +191,6 @@ public class PostprocessingUtil {
                 }
             }
             Log.d(TAG, finalReading.toString());
-//            print(finalReading);
         }
 
         for (int i = talingListTemp.size(); i > -1; i--) {
@@ -248,9 +229,7 @@ public class PostprocessingUtil {
             Log.d(TAG, finalReading.toString());
         }
 
-        Log.d(TAG, "Final Reading: " + finalReading.toString());
-//        print('');
-//        print('Final reading: \'$finalReading\'');
+        Log.d(TAG, "Final Reading: " + finalReading);
         return finalReading.toString();
     }
 }

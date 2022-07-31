@@ -1,9 +1,7 @@
 package com.example.javanesescriptrecognizer.utils;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,8 +16,6 @@ public class IOUtil {
         String fileName = prefix + "-"+ System.currentTimeMillis() +".txt";
 
         File file = new File (myDir, fileName);
-
-//        Log.d(TAG, file.getAbsolutePath());
 
         if (file.exists()) {
             file.delete();
@@ -45,8 +41,6 @@ public class IOUtil {
         String fileName = prefix + "-"+ System.currentTimeMillis() +".png";
 
         File file = new File (myDir, fileName);
-
-//        Log.d(TAG, file.getAbsolutePath());
 
         if (file.exists()) {
             file.delete();

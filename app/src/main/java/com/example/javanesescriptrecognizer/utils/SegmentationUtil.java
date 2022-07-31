@@ -2,7 +2,6 @@ package com.example.javanesescriptrecognizer.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 
@@ -15,11 +14,8 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Range;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.ximgproc.Ximgproc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -95,7 +91,6 @@ public class SegmentationUtil {
         boolean isOnLastIndex = false;
         Utils.bitmapToMat(inputBitmap, inputMat);
         inputMat = PreprocessingUtil.binarize(inputMat, false);
-//        Bitmap segmentedBitmap = inputBitmap.copy(inputBitmap.getConfig(), true);
 
         for (int i = 0; i < inputMat.cols(); i++) {
             nonZeros.add(Core.countNonZero(inputMat.col(i)));
@@ -192,7 +187,7 @@ public class SegmentationUtil {
         avgWidth = fullWidth / outputBitmaps.size();
         List<Bitmap> delete = new ArrayList<>();
 
-        Log.d("ABCDEFG", outputBitmaps.size() + "");
+        Log.d(TAG, outputBitmaps.size() + "");
 
 //        for (int i = 0; i < mats.size(); i++) {
 //            Mat mat = mats.get(i);
@@ -206,8 +201,8 @@ public class SegmentationUtil {
 //            outputBitmaps.remove(bitmap);
 //        }
 
-        Log.d("ABCDEFG", outputBitmaps.size() + "");
-        Log.d("ABCDEFG", outputBitmaps.size() + "=======================");
+        Log.d(TAG, outputBitmaps.size() + "");
+        Log.d(TAG, outputBitmaps.size() + "=======================");
 //        segmentationResults.add(
 //                new ProcessResult(5, segmentedBitmap, "Vertical Projection Profile")
 //        );
@@ -220,8 +215,7 @@ public class SegmentationUtil {
         List<List<Bitmap>> result = new ArrayList<>();
         int k = 0;
         for (Bitmap bitmap : source) {
-
-            Log.d("combined", k + "");
+            Log.d(TAG, "combined: " + k + "");
             Bitmap inputBitmap = bitmap.copy(bitmap.getConfig(), true);
 
             final int height = inputBitmap.getHeight();
@@ -254,49 +248,9 @@ public class SegmentationUtil {
 
             Core.bitwise_not(inputMat, inputMat);
 
-
-//        Mat kernel = new Mat(3, 3, CvType.CV_8U, new Scalar(0));
-//        Imgproc.erode(inputMat, inputMat, kernel, new Point(), 1);
-//
-//        boolean done = false;
-//        Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_CROSS, new Size(3,3));
-//        Mat eroded = new Mat();
-//        Mat temp = new Mat();
-//        Mat skel = new Mat(inputMat.rows(), inputMat.cols(), CvType.CV_8UC1, new Scalar(0));
-//
-//
-//        int size = inputMat.cols() * inputMat.rows();
-//        int zeros = 0;
-//        int iter = 0;
-//
-//        for (int i = 0; i < inputMat.cols(); i++) {
-//            Log.d(TAG, i + ": " + Core.countNonZero(inputMat.col(i)));
-//        }
-//
-//        while(!done)
-//        {
-//            Imgproc.erode(inputMat, eroded, element);
-//            Imgproc.dilate(eroded, temp, element);
-//            Core.subtract(inputMat, temp, temp);
-//            Core.bitwise_or(skel, temp, skel);
-//            eroded.copyTo(inputMat);
-//
-//            zeros = size - Core.countNonZero(inputMat);
-//            if(zeros == size) {
-//                done = true;
-//            }
-//            Log.d(TAG, "iteration: " + iter++);
-//        }
-
-//            Imgproc.connectedComponentsWithStats()
-//            output = Imgproc.connectedComponentsWithStats(
-//                    thresh, args["connectivity"], CvType.CV_32S);
-//            (numLabels, labels, stats, centroids) = output
-
             double fullWidth = 0;
             double avgWidth = 0;
             List<Mat> mats = new ArrayList<>();
-
 
             for (int i = 0; i < inputMat.rows(); i++) {
                 nonZeros.add(Core.countNonZero(inputMat.row(i)));
@@ -356,7 +310,7 @@ public class SegmentationUtil {
             avgWidth = fullWidth / outputBitmaps.size();
             List<Bitmap> deletes = new ArrayList<>();
 
-            Log.d("ABCDEFGH", outputBitmaps.size() + "");
+            Log.d(TAG, outputBitmaps.size() + "");
 
             for (int i = 0; i < mats.size(); i++) {
                 Mat mat = mats.get(i);
@@ -370,9 +324,8 @@ public class SegmentationUtil {
                 outputBitmaps.remove(delete);
             }
 
-            Log.d("ABCDEFGH", outputBitmaps.size() + "");
-            Log.d("ABCDEFGH", outputBitmaps.size() + "=======================");
-
+            Log.d(TAG, outputBitmaps.size() + "");
+            Log.d(TAG, outputBitmaps.size() + "=======================");
 
             int n = outputBitmaps.size();
 
@@ -487,7 +440,7 @@ public class SegmentationUtil {
                 }
                 Mat currentLabel = new Mat();
                 Core.compare(labels, new Scalar(i), currentLabel, Core.CMP_EQ);
-                Log.d("combined", j + ", " + i + ", " + (i - 1) + ", "
+                Log.d(TAG, "combined: " + j + ", " + i + ", " + (i - 1) + ", "
                         + Arrays.toString(combinedIndexes.toArray()));
 
                 if (i > 1 && !combinedIndexes.contains(i - 1) && prevW > 1 && prevH > 1) {
@@ -513,9 +466,9 @@ public class SegmentationUtil {
                                     || (currentTop >= previousTop && currentTop <= previousBottom);
                     double threshold = 1.5;
                     boolean heightRatioLessThanThreshold = largerHeight / smallerHeight < threshold;
-                    Log.d("combined", "prev: " + previousTop + ", " + previousBottom);
-                    Log.d("combined", "curr: " + currentTop + ", " + currentBottom);
-                    Log.d("combined", j+ ", " + i + ", " + (i - 1) + ": (" +
+                    Log.d(TAG, "combined: " + "prev: " + previousTop + ", " + previousBottom);
+                    Log.d(TAG, "combined: " + "curr: " + currentTop + ", " + currentBottom);
+                    Log.d(TAG, "combined: " + j+ ", " + i + ", " + (i - 1) + ": (" +
                             previousInsideCurrent + " || " +
                             currentInsidePrevious + ") && " +
                             heightRatioLessThanThreshold
@@ -529,7 +482,7 @@ public class SegmentationUtil {
                         Core.compare(labels, new Scalar(i - 1), previousLabel, Core.CMP_EQ);
                         Core.bitwise_or(currentLabel, previousLabel, currentLabel);
                         combinedIndexes.add(i - 1);
-                        Log.d("combined", "added " + (i - 1) + Arrays.toString(combinedIndexes.toArray()));
+                        Log.d(TAG, "combined: " + (i - 1) + Arrays.toString(combinedIndexes.toArray()));
 //                        combinedIndexes.add(i);
                     }
                 }
@@ -577,12 +530,12 @@ public class SegmentationUtil {
 //
 //                MyUtils.MatToImageView(this, "labeling : "+value, tv1, dst, R.id.imageView1);
             }
-            Log.d("combined", "verticalMap.keySet() before: " + verticalMap.keySet());
+            Log.d(TAG, "combined: " + "verticalMap.keySet() before: " + verticalMap.keySet());
 
             for (int combinedIndex : combinedIndexes) {
                 verticalMap.remove(combinedIndex);
             }
-            Log.d("combined", "verticalMap.keySet() after: " + verticalMap.keySet());
+            Log.d(TAG, "combined: " + "verticalMap.keySet() after: " + verticalMap.keySet());
             vertical = new ArrayList<>();
             for (Bitmap v : verticalMap.values()) {
                 List<Bitmap> segmented = segmentHorizontally(v);
@@ -613,130 +566,4 @@ public class SegmentationUtil {
 
         return result;
     }
-
-//    @NonNull
-//    public static List<List<Bitmap>> segmentCC(@NonNull Bitmap source) {
-//        List<List<Bitmap>> result = new ArrayList<>();
-//        Bitmap bitmap = source.copy(source.getConfig(), true);
-//
-////        for (Bitmap bitmap : source) {
-//            Bitmap inputBitmap = bitmap.copy(bitmap.getConfig(), true);
-//            Mat inputMat = new Mat(inputBitmap.getHeight(), inputBitmap.getWidth(), CvType.CV_8U);
-//            Mat labels = new Mat();
-//            Mat stats = new Mat();
-//            Mat centroids = new Mat();
-//            int connectivity = 8;
-//            int ltype = CvType.CV_32S;
-//            int componentsCount;
-//            Map<Integer, Bitmap> verticalMap = new HashMap<>();
-//            List<Bitmap> vertical;
-//
-//            Utils.bitmapToMat(inputBitmap, inputMat);
-////            Imgproc.cvtColor(inputMat, inputMat, Imgproc.COLOR_BGR2GRAY);
-//            inputMat = PreprocessingUtil.binarize(inputMat, false);
-//
-//            componentsCount = Imgproc.connectedComponentsWithStats(
-//                    inputMat,
-//                    labels,
-//                    stats,
-//                    centroids,
-//                    connectivity,
-//                    ltype
-//            );
-//            List<Integer> combinedIndexes = new ArrayList<>();
-//
-//            for (int i = 1; i < componentsCount; i++) {
-//                Mat currentLabel = new Mat();
-//                Core.compare(labels, new Scalar(i), currentLabel, Core.CMP_EQ);
-//                int currentLeft = (int)stats.get(i, Imgproc.CC_STAT_LEFT)[0];
-//                int currentTop = (int)stats.get(i, Imgproc.CC_STAT_TOP)[0];
-//                int currentWidth = (int)stats.get(i, Imgproc.CC_STAT_WIDTH)[0];
-//                int currentHeight = (int)stats.get(i, Imgproc.CC_STAT_HEIGHT)[0];
-//                int currentRight = currentLeft + currentWidth;
-//                int currentBottom = currentTop + currentHeight;
-//                Rect roi = new Rect(currentLeft, currentTop, currentWidth, currentHeight);
-//
-//                if (i > 1 && !combinedIndexes.contains(i - 1)) {
-////                    double currentWidth = stats.get(i, Imgproc.CC_STAT_WIDTH)[0];
-////                    double previousWidth = stats.get(i - 1, Imgproc.CC_STAT_WIDTH)[0];
-////                    double largerWidth = Math.max(currentWidth, previousWidth);
-////                    double smallerWidth = Math.min(currentWidth, previousWidth);
-////                    boolean widthRatioLessThanOneHalf = largerWidth / smallerWidth < 1.5;
-//
-//                    int previousLeft = (int)stats.get(i - 1, Imgproc.CC_STAT_LEFT)[0];
-//                    int previousTop = (int)stats.get(i - 1, Imgproc.CC_STAT_TOP)[0];
-//                    int previousWidth = (int)stats.get(i - 1, Imgproc.CC_STAT_WIDTH)[0];
-//                    int previousHeight = (int)stats.get(i - 1, Imgproc.CC_STAT_HEIGHT)[0];
-//                    int previousRight = previousLeft + previousWidth;
-//                    int previousBottom = previousTop + previousHeight;
-//                    double largerHeight = Math.max(currentHeight, previousHeight);
-//                    double smallerHeight = Math.min(currentHeight, previousHeight);
-//                    double largerWidth = Math.max(currentWidth, previousWidth);
-//                    double smallerWidth = Math.min(currentWidth, previousWidth);
-//                    boolean prevOverlapCurr =
-//                            (previousBottom > currentTop && previousBottom < currentBottom)
-//                                    || (previousTop > currentTop && previousTop < currentBottom)
-//                                    || (previousLeft <  );
-//                    boolean currentInsidePrevious =
-//                            (currentBottom > previousTop && currentBottom < previousBottom)
-//                                    || (currentTop > previousTop && currentTop < previousBottom);
-//                    double threshold = 1.5;
-//                    boolean heightRatioLessThanThreshold = largerHeight / smallerHeight < threshold;
-//
-//                    if ((previousInsideCurrent || currentInsidePrevious)
-//                            && heightRatioLessThanThreshold) {
-//                        Mat previousLabel = new Mat();
-//                        Core.compare(labels, new Scalar(i - 1), previousLabel, Core.CMP_EQ);
-//                        Core.bitwise_or(currentLabel, previousLabel, currentLabel);
-//                        combinedIndexes.add(i - 1);
-////                        combinedIndexes.add(i);
-//                    }
-//                }
-//
-//                Core.multiply(currentLabel, new Scalar(255), currentLabel);
-//
-////                int x = (int)stats.get(i, Imgproc.CC_STAT_LEFT)[0];
-////                int y = (int)stats.get(i, Imgproc.CC_STAT_TOP)[0];
-////                int w = (int)stats.get(i, Imgproc.CC_STAT_WIDTH)[0];
-////                int h = (int)stats.get(i, Imgproc.CC_STAT_HEIGHT)[0];
-////
-////                Mat currentComponent = new Mat(currentLabel, new Rect(x, y, w, h));
-//                Mat currentComponent = currentLabel.clone();
-//                currentLabel.release();
-//                Bitmap currentComponentBitmap = Bitmap.createBitmap(
-//                        currentComponent.width(),
-//                        currentComponent.height(),
-//                        Bitmap.Config.RGB_565
-//                );
-//                Core.bitwise_not(currentComponent, currentComponent);
-//                Utils.matToBitmap(currentComponent, currentComponentBitmap);
-////                vertical.add(currentComponentBitmap);
-//                verticalMap.put(i, currentComponentBitmap);
-////                int x = (int)stats.get(i, Imgproc.CC_STAT_LEFT)[0];
-////                int y = (int)stats.get(i, Imgproc.CC_STAT_TOP)[0];
-////                int w = (int)stats.get(i, Imgproc.CC_STAT_WIDTH)[0];
-////                int h = (int)stats.get(i, Imgproc.CC_STAT_HEIGHT)[0];
-////
-////                if(stats.get(i, CC_STAT_AREA)[0]<100 ||
-////                        stats.get(i, CC_STAT_AREA)[0]>(200*200)){
-////                    continue;
-////                }
-////
-////                Point pt1 = new Point(x,y);
-////                Point pt2 = new Point(x+w, y+h);
-////
-////                Imgproc.rectangle(dst, pt1, pt2, new Scalar(255, 0, 0), 2);
-////
-////                MyUtils.MatToImageView(this, "labeling : "+value, tv1, dst, R.id.imageView1);
-//            }
-//
-//            for (int combinedIndex : combinedIndexes) {
-//                verticalMap.remove(combinedIndex);
-//            }
-//            vertical = new ArrayList<>(verticalMap.values());
-//            result.add(vertical);
-////        }
-//
-//        return result;
-//    }
 }

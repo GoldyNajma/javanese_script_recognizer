@@ -18,6 +18,7 @@ import java.util.List;
 
 public class PreprocessingResultRecyclerViewAdapter
         extends RecyclerView.Adapter<PreprocessingResultRecyclerViewAdapter.MyViewHolder>{
+    private static final String TAG = "PreprocessingResultRVA";
     private final List<ProcessResult> mDataset;
     private final ContextProvider mContextProvider;
     private static MyClickListener myClickListener;
@@ -33,8 +34,8 @@ public class PreprocessingResultRecyclerViewAdapter
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            tvTitle = (TextView) itemView.findViewById(R.id.preprocessing_tv_title);
-            ivImage = (ImageView) itemView.findViewById(R.id.preprocessing_iv_image);
+            tvTitle = itemView.findViewById(R.id.preprocessing_tv_title);
+            ivImage = itemView.findViewById(R.id.preprocessing_iv_image);
             itemView.setOnClickListener(this);
         }
 
@@ -66,7 +67,7 @@ public class PreprocessingResultRecyclerViewAdapter
 
             return new PreprocessingResultRecyclerViewAdapter.MyViewHolder(view);
         } catch (Exception e) {
-            Log.e("AppDebug", "onCreateViewHolder", e);
+            Log.e(TAG, "onCreateViewHolder", e);
             throw e;
         }
     }

@@ -1,10 +1,13 @@
 package com.example.javanesescriptrecognizer;
 
-import com.example.javanesescriptrecognizer.data.models.AksaraClasses.*;
-import com.example.javanesescriptrecognizer.data.models.TypeEnums.*;
+import com.example.javanesescriptrecognizer.data.models.AksaraClass.*;
+import com.example.javanesescriptrecognizer.data.models.AksaraEnum.*;
 
 public class Constants {
-    public static String[] JAVANESE_SCRIPT_CLASSES = new String[]{
+    public static String MODEL_RESNEXT = "resnext50_32x4d.pt";
+    public static String MODEL_VGG = "vgg16_bn.pt";
+
+    public static String[] JAVANESE_SCRIPT_STRINGS = new String[]{
             "01-aksara.wyanjana.ha",
             "02-aksara.wyanjana.na",
             "03-aksara.wyanjana.ca",
@@ -93,7 +96,7 @@ public class Constants {
             "86-sandhangan.pengkal",
     };
 
-    public static JavaneseScript[] JAVANESE_SCRIPT_TYPES = new JavaneseScript[]{
+    public static JavaneseScript[] JAVANESE_SCRIPT_CLASSES = new JavaneseScript[]{
             new WyanjanaAksara(WyanjanaType.ha),
             new WyanjanaAksara(WyanjanaType.na),
             new WyanjanaAksara(WyanjanaType.ca),
@@ -181,9 +184,4 @@ public class Constants {
             new Sandhangan(SandhanganType.ceret),
             new Sandhangan(SandhanganType.pengkal),
     };
-
-    public static String MODEL_RESNEXT = "resnext50_32x4d.pt";
-    public static String MODEL_VGG = "vgg16_bn.pt";
-//    public static String MODEL_NAME = MODEL_NAME_1;
-    public static String MODEL_NAME = MODEL_VGG;
 }

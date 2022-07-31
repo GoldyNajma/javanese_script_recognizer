@@ -26,11 +26,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.javanesescriptrecognizer.data.models.AksaraClasses;
+import com.example.javanesescriptrecognizer.data.models.AksaraClass;
 import com.example.javanesescriptrecognizer.data.models.ProcessResult;
 import com.example.javanesescriptrecognizer.data.models.RecognitionResult;
 import com.example.javanesescriptrecognizer.data.models.Result;
@@ -41,7 +40,6 @@ import com.example.javanesescriptrecognizer.utils.PreprocessingUtil;
 import com.example.javanesescriptrecognizer.utils.SegmentationUtil;
 import com.example.javanesescriptrecognizer.utils.AksaraUtil;
 
-import org.jetbrains.annotations.Contract;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
@@ -78,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar pbLoading;
     private Module resnext = null;
     private Module vgg = null;
-//    private SerializableBitmap serializableBitmap;
 
     static {
         if (!OpenCVLoader.initDebug()) {
@@ -92,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
         new ActivityResultContracts.StartActivityForResult(),
         result -> {
             if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                // There are no request codes
                 Intent data = result.getData();
                 Uri selectedImage = data.getData();
                 String[] filePathColumn = { MediaStore.Images.Media.DATA };
@@ -105,10 +101,8 @@ public class MainActivity extends AppCompatActivity {
                 String picturePath = cursor.getString(columnIndex);
                 cursor.close();
 
-//                imageView = findViewById(R.id.main_iv_image);
                 ivImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 
-                //Setting the URI so we can read the Bitmap from the image
                 ivImage.setImageURI(null);
                 ivImage.setImageURI(selectedImage);
                 tvResult.setText("");
@@ -152,11 +146,12 @@ public class MainActivity extends AppCompatActivity {
     // https://stackoverflow.com/a/14532121
     @NonNull
     static Bitmap removeTransparency(@NonNull Bitmap image) {
-        Bitmap imageWithBG = Bitmap.createBitmap(image.getWidth(), image.getHeight(),image.getConfig());  // Create another image the same size
-        imageWithBG.eraseColor(Color.WHITE);  // set its background to white, or whatever color you want
-        Canvas canvas = new Canvas(imageWithBG);  // create a canvas to draw on the new image
-        canvas.drawBitmap(image, 0f, 0f, null); // draw old image on the background
-//        image.recycle();  // clear out old image
+        Bitmap imageWithBG = Bitmap
+                .createBitmap(image.getWidth(), image.getHeight(),image.getConfig());
+        imageWithBG.eraseColor(Color.WHITE);
+        Canvas canvas = new Canvas(imageWithBG);
+        canvas.drawBitmap(image, 0f, 0f, null);
+//        image.recycle();
         return imageWithBG;
     }
 
@@ -196,42 +191,22 @@ public class MainActivity extends AppCompatActivity {
             return new Result.Error<>(new Exception());
         }
         Bitmap bitmap = null;
-//        Module module = null;
-//        preprocessingResults.clear();
-//        segmentationResults.clear();
 
         ArrayList<ProcessResult> segmentationResults = new ArrayList<>();
         ArrayList<ProcessResult> preprocessingResults = new ArrayList<>();
         ArrayList<ProcessResult> resizeResult = new ArrayList<>();
 
-        //Getting the image from the image view
-//            imageView = findViewById(R.id.main_iv_image);
         List<Bitmap> horizontallySegmented = new ArrayList<>();
         List<List<Bitmap>> verticallySegmented = new ArrayList<>();
 
         long startTime = System.nanoTime();
         try {
-            //Read the image as Bitmap
             bitmap = ((BitmapDrawable) ivImage.getDrawable()).getBitmap();
 
             bitmap = removeTransparency(bitmap);
 
-//                saveImage(bitmap);
-            int width = bitmap.getWidth();
-            int height = bitmap.getHeight();
 
-            //Here we reshape the image into 224*224
-//                bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
-
-//                Mat gray= imread("path_to_image", IMREAD_GRAYSCALE);
-//                Bitmap bitmap32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-//                Bitmap binarized = PreprocessingUtil.binarize(bitmap);
             preprocessingResults.addAll(PreprocessingUtil.preprocess(bitmap));
-//                serializableBitmap = new SerializableBitmap(binarized);
-
-//                segmented = SegmentationUtil.segmentHorizontally(binarized);
-
-//                SegmentationUtil.getResults().clear();
             horizontallySegmented = SegmentationUtil.segmentHorizontally(
                     preprocessingResults.get(preprocessingResults.size() - 1).getImage()
             );
@@ -254,13 +229,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } catch (IOException e) {
-//                finish();
             showMessage("An error occured. " + e.getMessage());
             return new Result.Error<>(e);
         }
 
         StringBuilder stringBuilder = new StringBuilder("[ \n");
-        List<List<AksaraClasses.JavaneseScript>> aksara = new ArrayList<>();
+        List<List<AksaraClass.JavaneseScript>> aksara = new ArrayList<>();
         float[] normMeanRGB = new float[] {0.5f, 0.5f, 0.5f};
         float[] normStdRGB = new float[] {0.5f, 0.5f, 0.5f};
 
@@ -268,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (int k = 0; k < verticallySegmented.size(); k++ ) {
             List<Bitmap> segmented = verticallySegmented.get(k);
-            ArrayList<AksaraClasses.JavaneseScript> verticalAksara = new ArrayList<>();
+            ArrayList<AksaraClass.JavaneseScript> verticalAksara = new ArrayList<>();
             StringBuilder resultStrings = new StringBuilder();
             ProcessResult segRes = null;
 
@@ -281,13 +255,9 @@ public class MainActivity extends AppCompatActivity {
                         true
                 );
 
-//                Bitmap segmentedBitmap = segmented.get(i);
-
-                //Input Tensor
                 final Tensor input = TensorImageUtils
                         .bitmapToFloat32Tensor(segmentedBitmap, normMeanRGB, normStdRGB);
 
-                //Calling the forward of the model to run our input
                 assert resnext != null || vgg != null;
                 final Tensor output;
                 if ((model.equalsIgnoreCase(Constants.MODEL_RESNEXT))) {
@@ -298,13 +268,9 @@ public class MainActivity extends AppCompatActivity {
 
                 final float[] scores = output.getDataAsFloatArray();
 
-                // Fetch the index of the value with maximum score
                 float maxScore = -Float.MAX_VALUE;
                 int maxScoreIndex = -1;
                 for (int j = 0; j < scores.length; j++) {
-//                Log.d(TAG, "Score: \n" + Constants.JAVANESE_SCRIPT_CLASSES[i]
-//                        + ": "
-//                        + scores[i]);
                     if (scores[j] > maxScore) {
                         maxScore = scores[j];
                         maxScoreIndex = j;
@@ -315,13 +281,12 @@ public class MainActivity extends AppCompatActivity {
                 for (int j = 0; j < scores.length; j++) {
                     float currentScore = softmax(scores[j], scores) * 100;
 
-                    Log.d(TAG, "Softmax: \n" + Constants.JAVANESE_SCRIPT_CLASSES[j]
+                    Log.d(TAG, "Softmax: \n" + Constants.JAVANESE_SCRIPT_STRINGS[j]
                             + ": "
                             + currentScore);
                 }
 
-                //Fetching the name from the list based on the index
-                String recognizedClass = Constants.JAVANESE_SCRIPT_CLASSES[maxScoreIndex];
+                String recognizedClass = Constants.JAVANESE_SCRIPT_STRINGS[maxScoreIndex];
                 String percentage = Float.toString(maxScoreInPercentage);
                 percentage = percentage.contains(".")
                         ? percentage
@@ -334,8 +299,8 @@ public class MainActivity extends AppCompatActivity {
                         .append(percentage)
                         .append("%), ");
                 resultStrings.append(resultString);
-                AksaraClasses.JavaneseScript class_ =
-                        AksaraUtil.mapClassStringToType(recognizedClass);
+                AksaraClass.JavaneseScript class_ =
+                        AksaraUtil.mapStringToClass(recognizedClass);
                 verticalAksara.add(class_);
                 resizeResult.add(new ProcessResult(i, segmentedBitmap, resultString.toString()));
                 segRes = new ProcessResult(
@@ -357,49 +322,6 @@ public class MainActivity extends AppCompatActivity {
         String reading = PostprocessingUtil.arrange(aksara);
         long endTime = System.nanoTime();
         long duration = TimeUnit.NANOSECONDS.toMillis(endTime - startTime);
-        stringBuilder
-//                    .insert(0, "\n\n\n")
-//                    .insert(0, reading)
-                .insert(0, unicodes + "\n\n")
-                .append("\n]\n");
-
-        stringBuilder = new StringBuilder(unicodes);
-//        recognitionResult = new RecognitionResult(
-//                preprocessingResults,
-//                segmentationResults,
-//                duration,
-//                reading,
-//                unicodes
-//        );
-////            String time = System.currentTimeMillis() + "";
-////
-////            for (int p = 0; p < preprocessingResults.size(); p++) {
-////                IOUtil.saveImage(
-////                        preprocessingResults.get(p).getImage(),
-////                        reading + "/" + time + "/Preprocessing/",
-////                        (p + 1) + "-" + preprocessingResults.get(p).getTitle()
-////                );
-////            }
-////            for (int s = 0; s < segmentationResults.size(); s++) {
-////                IOUtil.saveImage(
-////                        segmentationResults.get(s).getImage(),
-////                        reading + "/" + time + "/Segmentation/",
-////                        (s + 1) + "-" + segmentationResults.get(s).getTitle()
-////                );
-////            }
-//
-//        //Writing the detected class in to the text view of the layout
-////            TextView textView = findViewById(R.id.main_tv_result);
-//        tvReading.setText("Reading: \n");
-//        tvReading.append(reading);
-//        tvResult.setText(stringBuilder.toString());
-//        textToSpeech.speak(
-//                reading,
-//                TextToSpeech.QUEUE_FLUSH,
-//                null,
-//                this.hashCode() + ""
-//        );
-//        showMessage(reading);
         String modelName = model.equalsIgnoreCase(Constants.MODEL_RESNEXT)
                 ? "ResNeXt-50"
                 : "VGG-16";
@@ -424,23 +346,12 @@ public class MainActivity extends AppCompatActivity {
         resultCallback.onLoading();
 
         executor.execute(() -> {
-            //Background work here
             Result<RecognitionResult> result = doRecognition(model);
 
             handler.post(() -> {
                 resultCallback.onComplete(result);
             });
         });
-//        executorService.execute(() -> {
-//            runOnUiThread(() -> {
-//                resultCallback.onLoading();
-//                try {
-//                    resultCallback.onComplete(doRecognition());
-//                } catch (Exception e) {
-//                    resultCallback.onComplete(new Result.Error<>(e));
-//                }
-//            });
-//        });
     }
 
     @Override
@@ -457,7 +368,6 @@ public class MainActivity extends AppCompatActivity {
         btDetail = findViewById(R.id.main_bt_detail);
         pbLoading = findViewById(R.id.main_pb_loading);
 
-        //Loading the model file.
         try {
             vgg = Module.load(fetchModelFile(this, Constants.MODEL_VGG));
             resnext = Module.load(fetchModelFile(this, Constants.MODEL_RESNEXT));
@@ -479,9 +389,6 @@ public class MainActivity extends AppCompatActivity {
                             locale = Locale.US;
                             textToSpeech.setLanguage(Locale.US);
                         }
-//                        showMessage("Text to speech successfully initialized in " +
-//                                locale.getDisplayLanguage() + ".");
-                        // Take action based on the result of initialisation
 
                     }
                 } else {
@@ -500,8 +407,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         btLoad.setOnClickListener(arg0 -> {
-//            textView = findViewById(R.id.main_tv_result);
-//            tvResult.setText("");
             Intent pickImageIntent = new Intent(
                     Intent.ACTION_PICK,
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -598,11 +503,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-//        if (textToSpeech != null) {
-//            textToSpeech.stop();
-//            textToSpeech.shutdown();
-//            showMessage("Text to speech stopped");
-//        }
         super.onPause();
     }
 }

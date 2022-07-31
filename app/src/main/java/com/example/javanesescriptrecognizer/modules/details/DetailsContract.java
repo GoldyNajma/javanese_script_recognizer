@@ -17,12 +17,5 @@ public interface DetailsContract {
     }
 
     interface Interactor {
-//        void requestIndexTasks(RequestCallback<IndexTasksResponse> requestCallback, String option);
-//        void requestUpdateTaskCompletion(RequestCallback<TaskResponse> requestCallback,
-//                                         int taskId, boolean completionStatus);
-//        String getToken();
-//        void deleteSession();
-//        User getUser();
-//        void requestLogout(RequestCallback<LogoutResponse> requestCallback);
     }
 }

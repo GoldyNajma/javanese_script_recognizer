@@ -36,7 +36,7 @@ package com.example.javanesescriptrecognizer.data.models;
 //    }
 //}
 
-public class TypeEnums {
+public class AksaraEnum {
     public enum GroupType {
         aksara, sandhangan, pasangan,
     }

@@ -2,9 +2,9 @@ package com.example.javanesescriptrecognizer.data.models;
 
 import androidx.annotation.NonNull;
 
-import com.example.javanesescriptrecognizer.data.models.TypeEnums.*;
+import com.example.javanesescriptrecognizer.data.models.AksaraEnum.*;
 
-public class AksaraClasses {
+public class AksaraClass {
     public abstract static class JavaneseScript {
         public abstract GroupType getGroupType();
         public abstract SubGroupType getSubGroupType();

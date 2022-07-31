@@ -19,6 +19,7 @@ import java.util.List;
 
 public class SegmentationResultRecyclerViewAdapter
         extends RecyclerView.Adapter<SegmentationResultRecyclerViewAdapter.MyViewHolder> {
+    private static final String TAG = "SegmentationResultRVA";
     private final List<ProcessResult> mDataset;
     private final ContextProvider mContextProvider;
     private static MyClickListener myClickListener;
@@ -31,9 +32,9 @@ public class SegmentationResultRecyclerViewAdapter
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            tvTitle = (TextView) itemView.findViewById(R.id.segmentation_tv_title);
-            tvUnicode = (TextView) itemView.findViewById(R.id.segmentation_tv_unicode);
-            ivImage = (ImageView) itemView.findViewById(R.id.segmentation_iv_image);
+            tvTitle = itemView.findViewById(R.id.segmentation_tv_title);
+            tvUnicode = itemView.findViewById(R.id.segmentation_tv_unicode);
+            ivImage = itemView.findViewById(R.id.segmentation_iv_image);
             itemView.setOnClickListener(this);
         }
 
@@ -65,7 +66,7 @@ public class SegmentationResultRecyclerViewAdapter
 
             return new MyViewHolder(view);
         } catch (Exception e) {
-            Log.e("AppDebug", "onCreateViewHolder", e);
+            Log.e(TAG, "onCreateViewHolder", e);
             throw e;
         }
     }
@@ -76,27 +77,6 @@ public class SegmentationResultRecyclerViewAdapter
         holder.tvTitle.setText(mDataset.get(position).getTitle());
         holder.tvUnicode.setText(mDataset.get(position).getUnicode());
     }
-
-//    private void setOnIbShareClick(int position) {
-//        Task task = mDataset.get(position);
-//        String status = task.isCompleted() ? "Completed" : "Not Completed Yet";
-//        String taskPlainText = "Task Title: \n"
-//                + "-> " + task.getTitle() + "\n\n"
-//                + "Task Description: \n"
-//                + "-> " + task.getDescription() +"\n\n"
-//                + "Status: \n"
-//                + "-> " + status;
-//        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-//        Context context = mContextProvider.getContext();
-//
-//        shareIntent.setType("text/plain");
-//        shareIntent.putExtra(Intent.EXTRA_TEXT, taskPlainText);
-//        try {
-//            context.startActivity(shareIntent);
-//        } catch (android.content.ActivityNotFoundException ex) {
-//            Toast.makeText(context, ex.getMessage(), Toast.LENGTH_SHORT).show();
-//        }
-//    }
 
     @Override
     public int getItemCount() {

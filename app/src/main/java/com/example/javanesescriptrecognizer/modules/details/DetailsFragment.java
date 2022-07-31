@@ -30,12 +30,12 @@ import java.util.List;
 
 public class DetailsFragment extends BaseFragment<DetailsActivity, DetailsContract.Presenter>
         implements DetailsContract.View {
+    private static final String TAG = "DetailsFragment";
     RecyclerView rvSegmentation;
     RecyclerView rvPreprocessing;
     Button btSave;
     private Toast toastMessage;
     private TextView tvModel;
-//    ImageView ivPreprocessed;
     private RecyclerView.Adapter<SegmentationResultRecyclerViewAdapter.MyViewHolder> mAdapter;
     private RecyclerView.Adapter<PreprocessingResultRecyclerViewAdapter.MyViewHolder> mAdapterP;
 
@@ -47,14 +47,11 @@ public class DetailsFragment extends BaseFragment<DetailsActivity, DetailsContra
         super.onCreateView(inflater, container, savedStateInstance);
 
         fragmentView = inflater.inflate(R.layout.fragment_details, container, false);
-//        ivPreprocessed = fragmentView.findViewById(R.id.iv_preprocessed);
-//        pbLoading = fragmentView.findViewById(R.id.home_pb_loading);
         btSave = fragmentView.findViewById(R.id.details_bt_save);
         tvModel = fragmentView.findViewById(R.id.details_tv_model);
         rvSegmentation = fragmentView.findViewById(R.id.details_rv_segmentation);
         rvPreprocessing = fragmentView.findViewById(R.id.details_rv_preprocessing);
 
-//        pbLoading.setVisibility(View.GONE);
         rvPreprocessing.setHasFixedSize(true);
         rvPreprocessing.setLayoutManager(
                 new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
@@ -63,11 +60,6 @@ public class DetailsFragment extends BaseFragment<DetailsActivity, DetailsContra
         rvSegmentation.setHasFixedSize(true);
         rvSegmentation.setLayoutManager(new LinearLayoutManager(activity));
         Intent intent = requireActivity().getIntent();
-//        SerializableBitmap bitmap = (SerializableBitmap) intent
-//                .getSerializableExtra("PreprocessingResultExtra");
-//        ArrayList<SegmentationResult> results = (ArrayList<SegmentationResult>) intent
-//                .getSerializableExtra("SegmentationResultsExtra");
-////        ivPreprocessed.setImageBitmap(bitmap.getBitmap());
         RecognitionResult recognitionResult = (RecognitionResult)intent
                 .getSerializableExtra("RecognitionResultExtra");
         ArrayList<ProcessResult> preprocessingResults = recognitionResult.getPreprocessingResults();
@@ -123,59 +115,27 @@ public class DetailsFragment extends BaseFragment<DetailsActivity, DetailsContra
     }
 
     private void setRvPreprocessingAdapter(final List<ProcessResult> adapterData) {
-        mAdapterP = new PreprocessingResultRecyclerViewAdapter(
-                new PreprocessingResultRecyclerViewAdapter.ContextProvider() {
-                    @Override
-                    public Context getContext() {
-                return activity;
-            }
-                },
-                adapterData
-        );
+        mAdapterP = new PreprocessingResultRecyclerViewAdapter(() -> activity, adapterData);
         rvPreprocessing.setAdapter(mAdapterP);
 
-        ((PreprocessingResultRecyclerViewAdapter) mAdapterP).setOnItemClickListener(
-                new PreprocessingResultRecyclerViewAdapter.MyClickListener() {
-                    @Override
-                    public void onItemClick(int position, View v) {
-                        int id = adapterData.get(position).getId();
+        ((PreprocessingResultRecyclerViewAdapter) mAdapterP)
+                .setOnItemClickListener((position, v) -> {
+                    int id = adapterData.get(position).getId();
 
-                        Log.d("AppDebug","clicked position : "+ position);
-                    }
+                    Log.d(TAG,"clicked position : "+ position);
                 });
     }
 
     private void setRvSegmentationAdapter(final List<ProcessResult> adapterData) {
-        mAdapter = new SegmentationResultRecyclerViewAdapter(new SegmentationResultRecyclerViewAdapter.ContextProvider() {
-            @Override
-            public Context getContext() {
-                return activity;
-            }
-        }, adapterData);
+        mAdapter = new SegmentationResultRecyclerViewAdapter(() -> activity, adapterData);
         rvSegmentation.setAdapter(mAdapter);
 
-        ((SegmentationResultRecyclerViewAdapter) mAdapter).setOnItemClickListener(
-                new SegmentationResultRecyclerViewAdapter.MyClickListener() {
-                    @Override
-                    public void onItemClick(int position, View v) {
-                        int id = adapterData.get(position).getId();
+        ((SegmentationResultRecyclerViewAdapter) mAdapter).setOnItemClickListener((position, v) -> {
+            int id = adapterData.get(position).getId();
 
-                        Log.d("AppDebug","clicked position : "+ position);
-                    }
-                });
+            Log.d(TAG,"clicked position : "+ position + ", id: " + id);
+        });
     }
-
-//    public void setFabAddTaskClick() {
-//        redirectToAddTask();
-//    }
-
-//    @Override
-//    public void redirectToLogin() {
-//        Intent intent = new Intent(activity, LoginActivity.class);
-//
-//        startActivity(intent);
-//        activity.finish();
-//    }
 
     @Override
     public void showPreprocessingResults(List<ProcessResult> results) {
@@ -186,23 +146,6 @@ public class DetailsFragment extends BaseFragment<DetailsActivity, DetailsContra
     public void showSegmentationResults(List<ProcessResult> results) {
         setRvSegmentationAdapter(results);
     }
-
-//    @Override
-//    public void redirectToAddTask() {
-//        Intent intent = new Intent(activity, AddTaskActivity.class);
-//
-//        startActivity(intent);
-//        activity.finish();
-//    }
-
-//    @Override
-//    public void redirectToEditTask(int id) {
-//        Intent intent = new Intent(activity, EditTaskActivity.class);
-//
-//        intent.putExtra(Constants.EXTRA_TASK_ID, id);
-//        startActivity(intent);
-//        activity.finish();
-//    }
 
     public DetailsContract.Presenter getPresenter() {
         return mPresenter;
