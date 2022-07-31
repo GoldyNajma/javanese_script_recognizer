@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
                 AksaraClass.JavaneseScript class_ =
                         AksaraUtil.mapStringToClass(recognizedClass);
                 verticalAksara.add(class_);
-                resizeResult.add(new ProcessResult(i, segmentedBitmap, resultString.toString()));
+                resizeResult.add(new ProcessResult(index, segmentedBitmap, resultString.toString()));
                 segRes = new ProcessResult(
                         index,
                         segmented.get(i),
